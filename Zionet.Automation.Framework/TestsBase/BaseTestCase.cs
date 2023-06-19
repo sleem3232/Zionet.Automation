@@ -16,11 +16,13 @@ namespace Zionet.Automation.Framework.TestsBase
         protected DateTime StartTime;
         public  ITestOutputHelper testOutputHelper;
 
-        public  BaseTest()
+        public  BaseTest(ITestOutputHelper testOutputHelper)
         {
             _frameworkConfig = new FrameworkConfig($@".\Resources\FrameworkConfiguration.xml");
-            ReportManager.Test($"Test Start: {testOutputHelper.GetType().Name}");
-            ReportManager.Test($@"Test OutputData Folder: {Dns.GetHostName()}\{Directory.GetCurrentDirectory().Replace(':', '$')}\{LocalLoggerReporter.TestOutputDataFolder.Remove(0, 2)}");
+            this.testOutputHelper= testOutputHelper;
+            //TODO: Convert it to .NET7
+            //ReportManager.Test($"Test Start: {testOutputHelper.}");
+            //ReportManager.Test($@"Test OutputData Folder: {Dns.GetHostName()}\{Directory.GetCurrentDirectory().Replace(':', '$')}\{LocalLoggerReporter.TestOutputDataFolder.Remove(0, 2)}");
             StartTime = DateTime.Now;
             LocalLoggerReporter.DoSequencesStepsReport = true;
         }

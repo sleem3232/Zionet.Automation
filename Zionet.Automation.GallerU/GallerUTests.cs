@@ -1,29 +1,25 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
+﻿using Xunit.Abstractions;
 using Xunit;
-using Xunit.Abstractions;
 using Zionet.Automation.Framework.TestsBase;
+using OpenQA.Selenium;
+using WebDriverManager;
+using OpenQA.Selenium.Chrome;
+using WebDriverManager.DriverConfigs.Impl;
 
-namespace Zionet.Automation.GallerU.Tests
+namespace Zionet.Automation.GallerU
 {
     public class GallerUTests : BaseTest
     {
         private ITestOutputHelper testOutputHelper;
         private readonly IWebDriver chromeDriver;
 
-        public GallerUTests(ITestOutputHelper testOutputHelper)
+        public GallerUTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
             var driver = new DriverManager().SetUpDriver(new ChromeConfig());
             chromeDriver = new ChromeDriver();
         }
+
         [Fact]
         public void Test1()
         {
