@@ -1,25 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Xunit.Abstractions;
 using Zionet.Automation.Framework.Config;
 using Zionet.Automation.Framework.Services.Reporter;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Zionet.Automation.Framework.TestsBase
 {
-    public class BaseTest : IDisposable
+    public abstract class BaseTest : IDisposable
     {
         protected FrameworkConfig _frameworkConfig;
         private DateTime _startTime;
         private StreamWriter _outputFile;
         public ITestOutputHelper testOutputHelper;
+        protected string _testName;
+
         public BaseTest(ITestOutputHelper testOutputHelper)
         {
             _frameworkConfig = new FrameworkConfig($@".\Resources\FrameworkConfiguration.xml");
-          this.testOutputHelper = testOutputHelper;
+            this.testOutputHelper = testOutputHelper;
             _startTime = DateTime.Now;
             LocalLoggerReporter.DoSequencesStepsReport = true;
 
@@ -28,10 +30,28 @@ namespace Zionet.Automation.Framework.TestsBase
 
             string logFilePath = Path.Combine(logFolderPath, "log.txt");
             _outputFile = new StreamWriter(logFilePath, true);
-            _outputFile.WriteLine($"Test Start*****************: {testOutputHelper.GetType().Name}");
+
+            _testName = GetTestName();
+            _outputFile.WriteLine($"Test Start: {_testName}");
+        }
+        protected void InitializeTest()
+        {
+            _testName = GetTestName();
+            _outputFile.WriteLine($"Test Start: {_testName}");
         }
 
+        private string GetTestName()
+        {
+            var callingMethod = new StackFrame(1).GetMethod();
+            var testClassType = GetType();
 
+            return $"{testClassType.Name}.{callingMethod.Name}";
+        }
+
+        private string GetCurrentMethodName([CallerMemberName] string methodName = "")
+        {
+            return methodName;
+        }
         public void Dispose()
         {
             // This method runs after the test run
@@ -42,7 +62,7 @@ namespace Zionet.Automation.Framework.TestsBase
             // Check if any tests failed
             if (testOutputHelper != null)
             {
-                var testFailed = testDuration.TotalMilliseconds > 1000; // Example condition for test failure
+                var testFailed = testDuration.TotalMilliseconds > 100000; // Example condition for test failure
 
                 if (testFailed)
                 {
@@ -57,14 +77,10 @@ namespace Zionet.Automation.Framework.TestsBase
                 }
             }
 
-
-
             _outputFile.WriteLine($"Test Duration: {testDuration.Hours}:{testDuration.Minutes}:{testDuration.Seconds} [hr:min:sec]");
 
             // Close the log file
             _outputFile.Close();
-        }    
-      
+        }
     }
 }
-
