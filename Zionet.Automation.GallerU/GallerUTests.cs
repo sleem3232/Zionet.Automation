@@ -5,17 +5,16 @@ using OpenQA.Selenium;
 using WebDriverManager;
 using OpenQA.Selenium.Chrome;
 using WebDriverManager.DriverConfigs.Impl;
+using Xunit.Sdk;
 
 namespace Zionet.Automation.GallerU
 {
     public class GallerUTests : BaseTest
     {
-        private ITestOutputHelper testOutputHelper;
         private readonly IWebDriver chromeDriver;
 
         public GallerUTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            this.testOutputHelper = testOutputHelper;
             var driver = new DriverManager().SetUpDriver(new ChromeConfig());
             chromeDriver = new ChromeDriver();
         }
@@ -23,8 +22,6 @@ namespace Zionet.Automation.GallerU
         [Fact]
         public void Test1()
         {
-            testOutputHelper.WriteLine("First test");
-
             // Perform your test actions
             chromeDriver.Navigate().GoToUrl("http://eaapp.somee.com");
 
@@ -32,7 +29,7 @@ namespace Zionet.Automation.GallerU
             Assert.True(true, "This is a sample assertion");
 
             // Write additional output
-            testOutputHelper.WriteLine("Test completed successfully");
+           
         }
     }
 
