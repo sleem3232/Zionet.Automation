@@ -15,11 +15,11 @@ namespace Zionet.Automation.Framework.TestsBase
         protected FrameworkConfig _frameworkConfig;
         private DateTime _startTime;
         private StreamWriter _outputFile;
-        private readonly ITestOutputHelper _testOutputHelper;
+        public ITestOutputHelper testOutputHelper;
         public BaseTest(ITestOutputHelper testOutputHelper)
         {
             _frameworkConfig = new FrameworkConfig($@".\Resources\FrameworkConfiguration.xml");
-            _testOutputHelper = testOutputHelper;
+          this.testOutputHelper = testOutputHelper;
             _startTime = DateTime.Now;
             LocalLoggerReporter.DoSequencesStepsReport = true;
 
@@ -28,7 +28,7 @@ namespace Zionet.Automation.Framework.TestsBase
 
             string logFilePath = Path.Combine(logFolderPath, "log.txt");
             _outputFile = new StreamWriter(logFilePath, true);
-            _outputFile.WriteLine($"Test Start: {_testOutputHelper.GetType().Name}");
+            _outputFile.WriteLine($"Test Start*****************: {testOutputHelper.GetType().Name}");
         }
 
 
@@ -40,26 +40,26 @@ namespace Zionet.Automation.Framework.TestsBase
             var testDuration = endTime - _startTime;
 
             // Check if any tests failed
-            if (_testOutputHelper != null)
+            if (testOutputHelper != null)
             {
                 var testFailed = testDuration.TotalMilliseconds > 1000; // Example condition for test failure
 
                 if (testFailed)
                 {
-                    _testOutputHelper.WriteLine("Test Done: #############Failed#############");
+                    _outputFile.WriteLine("Test Done: #############Failed#############");
                     ReportManager.TestWrapUp("Test Failed", isTestFailed: true);
                     ReportManager.Error("Test Failed due to Assertion Exception");
                 }
                 else
                 {
-                    _testOutputHelper.WriteLine("Test Done: #############Passed#############");
-                    ReportManager.TestWrapUp("", isTestFailed: false);
+                    _outputFile.WriteLine("Test Done: #############Passed#############");
+                    ReportManager.TestWrapUp("***********", isTestFailed: false);
                 }
             }
 
-          
 
-            _testOutputHelper.WriteLine($"Test Duration: {testDuration.Hours}:{testDuration.Minutes}:{testDuration.Seconds} [hr:min:sec]");
+
+            _outputFile.WriteLine($"Test Duration: {testDuration.Hours}:{testDuration.Minutes}:{testDuration.Seconds} [hr:min:sec]");
 
             // Close the log file
             _outputFile.Close();
