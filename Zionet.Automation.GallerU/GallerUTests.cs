@@ -23,16 +23,21 @@ namespace Zionet.Automation.GallerU
         [Fact]
         public void Test1()
         {
-            testOutputHelper.WriteLine("First test");
 
-            // Perform your test actions
-            chromeDriver.Navigate().GoToUrl("http://eaapp.somee.com");
+            using (IWebDriver driver = new ChromeDriver(driver))
+            {
 
-            // Assert your test results
-            Assert.True(true, "This is a sample assertion");
+                testOutputHelper.WriteLine("First test");
 
-            // Write additional output
-            testOutputHelper.WriteLine("Test completed successfully");
+                // Perform your test actions
+                //chromeDriver.Navigate().GoToUrl("http://eaapp.somee.com");
+
+                // Assert your test results
+                //Assert.True(true, "This is a sample assertion");
+
+                // Write additional output
+                testOutputHelper.WriteLine("Test completed successfully");
+            }
         }
     }
 

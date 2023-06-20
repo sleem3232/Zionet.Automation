@@ -10,7 +10,7 @@ using Zionet.Automation.Framework.Services.Reporter;
 
 namespace Zionet.Automation.Framework.TestsBase
 {
-    public class BaseTest 
+    public class BaseTest  : IDisposable
     {
         protected FrameworkConfig _frameworkConfig;
         protected DateTime StartTime;
