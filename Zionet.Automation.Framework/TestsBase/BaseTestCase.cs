@@ -48,10 +48,7 @@ namespace Zionet.Automation.Framework.TestsBase
             return $"{testClassType.Name}.{callingMethod.Name}";
         }
 
-        private string GetCurrentMethodName([CallerMemberName] string methodName = "")
-        {
-            return methodName;
-        }
+       
         public void Dispose()
         {
             // This method runs after the test run
