@@ -1,41 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Xunit.Abstractions;
 using Zionet.Automation.Framework.Config;
 using Zionet.Automation.Framework.Services.Reporter;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Zionet.Automation.Framework.TestsBase
 {
-    public class BaseTest  : IDisposable
+    public abstract class BaseTest : IDisposable
     {
         protected FrameworkConfig _frameworkConfig;
-        protected DateTime StartTime;
-        public  ITestOutputHelper testOutputHelper;
+        private DateTime _startTime;
+        private StreamWriter _outputFile;
+        public ITestOutputHelper testOutputHelper;
+        protected string _testName;
 
-        public  BaseTest(ITestOutputHelper testOutputHelper)
+        public BaseTest(ITestOutputHelper testOutputHelper)
         {
             _frameworkConfig = new FrameworkConfig($@".\Resources\FrameworkConfiguration.xml");
-            this.testOutputHelper= testOutputHelper;
-            //TODO: Convert it to .NET7
-            //ReportManager.Test($"Test Start: {testOutputHelper.}");
-            //ReportManager.Test($@"Test OutputData Folder: {Dns.GetHostName()}\{Directory.GetCurrentDirectory().Replace(':', '$')}\{LocalLoggerReporter.TestOutputDataFolder.Remove(0, 2)}");
-            StartTime = DateTime.Now;
+            this.testOutputHelper = testOutputHelper;
+            _startTime = DateTime.Now;
             LocalLoggerReporter.DoSequencesStepsReport = true;
+
+            string logFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "log");
+            Directory.CreateDirectory(logFolderPath); // Create the "log" folder if it doesn't exist
+
+            string logFilePath = Path.Combine(logFolderPath, "log.txt");
+            _outputFile = new StreamWriter(logFilePath, true);
+
+            _testName = GetTestName();
+            _outputFile.WriteLine($"Test Start: {_testName}");
+        }
+        protected void InitializeTest()
+        {
+            _testName = GetTestName();
+            _outputFile.WriteLine($"Test Start: {_testName}");
         }
 
+        private string GetTestName()
+        {
+            var callingMethod = new StackFrame(1).GetMethod();
+            var testClassType = GetType();
+
+            return $"{testClassType.Name}.{callingMethod.Name}";
+        }
+
+       
         public void Dispose()
         {
-            // This method runs after each test case
+            // This method runs after the test run
+
             var endTime = DateTime.Now;
-            var testDuration = endTime - StartTime;
+            var testDuration = endTime - _startTime;
 
-            // Any teardown code specific to your project
+            // Check if any tests failed
+            if (testOutputHelper != null)
+            {
+                var testFailed = testDuration.TotalMilliseconds > 100000; // Example condition for test failure
 
-            Console.WriteLine($"Test Duration: {testDuration.Hours}:{testDuration.Minutes}:{testDuration.Seconds} [hr:min:sec]");
+                if (testFailed)
+                {
+                    _outputFile.WriteLine("Test Done: #############Failed#############");
+                    ReportManager.TestWrapUp("Test Failed", isTestFailed: true);
+                    ReportManager.Error("Test Failed due to Assertion Exception");
+                }
+                else
+                {
+                    _outputFile.WriteLine("Test Done: #############Passed#############");
+                    ReportManager.TestWrapUp("***********", isTestFailed: false);
+                }
+            }
+
+            _outputFile.WriteLine($"Test Duration: {testDuration.Hours}:{testDuration.Minutes}:{testDuration.Seconds} [hr:min:sec]");
+
+            // Close the log file
+            _outputFile.Close();
         }
     }
 }

@@ -1,44 +1,63 @@
-﻿using Xunit.Abstractions;
-using Xunit;
+﻿using System;
+using Xunit.Abstractions;
 using Zionet.Automation.Framework.TestsBase;
 using OpenQA.Selenium;
-using WebDriverManager;
 using OpenQA.Selenium.Chrome;
-using WebDriverManager.DriverConfigs.Impl;
+using Xunit;
 
 namespace Zionet.Automation.GallerU
 {
     public class GallerUTests : BaseTest
     {
-        private ITestOutputHelper testOutputHelper;
-        private readonly IWebDriver chromeDriver;
+        private ChromeOptions options = new ChromeOptions();
+        private Proxy proxy = new Proxy();
 
         public GallerUTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            this.testOutputHelper = testOutputHelper;
-            var driver = new DriverManager().SetUpDriver(new ChromeConfig());
-            chromeDriver = new ChromeDriver();
+            proxy.HttpProxy = "http://localhost:56133/";
+            options.Proxy = proxy;
+            options.AddArguments("start-maximized");
+            options.AddArgument("--remote-debugging-port=6321"); // Set the desired port here
         }
-
+      
         [Fact]
         public void Test1()
         {
-
-            using (IWebDriver driver = new ChromeDriver(driver))
+            using (IWebDriver driver = new ChromeDriver(options))
             {
 
                 testOutputHelper.WriteLine("First test");
 
                 // Perform your test actions
-                //chromeDriver.Navigate().GoToUrl("http://eaapp.somee.com");
+                // driver.Navigate().GoToUrl("http://eaapp.somee.com");
 
                 // Assert your test results
-                //Assert.True(true, "This is a sample assertion");
+                // Assert.True(true, "This is a sample assertion");
 
                 // Write additional output
                 testOutputHelper.WriteLine("Test completed successfully");
+
+                driver.Quit();
+            }
+        }
+        [Fact]
+        public void Test2()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                testOutputHelper.WriteLine("First test");
+
+                // Perform your test actions
+                // driver.Navigate().GoToUrl("http://eaapp.somee.com");
+
+                // Assert your test results
+                // Assert.True(true, "This is a sample assertion");
+
+                // Write additional output
+                testOutputHelper.WriteLine("Test completed successfully");
+
+                driver.Quit();
             }
         }
     }
-
 }
