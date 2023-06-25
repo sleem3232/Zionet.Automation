@@ -11,16 +11,16 @@ namespace Zionet.Automation.Framework.Services.Reporter
 {
     public class LocalLoggerReporter : IReporter
     {
-        private static string TestSequenceStepsCSVFileName = "Sequence_Steps.csv";
+        private static string TestSequenceStepsCSVFileName = "Sequence_Steps.txt";
         public static string OutputDataFolder = $@".\OutputData\{DateTime.Now:dd-MM-yyyy HH-mm-ss}";
      //   private readonly ITestOutputHelper _output;
 
 
-        public static string TestOutputDataFolder = "";
+        public static string TestOutputDataFolder = "Sequence_Steps.txt";
         public static string CurrentTestLogFile = "";
 
         public static DateTime StepStartTime { get; set; }
-        public static string CurrentStep { get; set; }
+        public static string? CurrentStep { get; set; }
 
         /// <summary>
         /// TODO - flag control
@@ -223,7 +223,7 @@ namespace Zionet.Automation.Framework.Services.Reporter
 
         private static readonly Logger _instance = new Logger();
         private static StringBuilder date;
-        private static StringBuilder _logFilePath;
+        private static StringBuilder? _logFilePath;
         private static object lockThis = new object();
 
         public static StringBuilder LogFilePath
