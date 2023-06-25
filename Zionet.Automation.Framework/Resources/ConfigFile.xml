@@ -1,0 +1,34 @@
+<AppsSettings>
+  <GallerU>
+    <!-- URLS -->
+    <GallerU name="URL_Photographer" value="http://test-app.galleru.net/" />
+    <GallerU name="URL_Guest" value="" />
+    <!-- SHARED_FOLDER -->
+    <GallerU name="SharedFolder" value="Z:\" />
+    <GallerU name="SharedFolderSetup" value=".\Resources\SharedFolder_Setup.txt" />
+    <GallerU name="EventPics_Path" value="Z:\Pictures\Events" />
+    <GallerU name="SelfeVideo_Path" value="Z:/Pictures/Selfes" />
+    <!-- INPUTS -->
+    <!-- |-> DO NOT CHANGE <-| Current User-->
+    <GallerU name="Input_Email" value="SelTest1@gmail.com" />
+    <GallerU name="Input_Email_Fake" value="SelTests1@gmail.com" />
+    <GallerU name="Input_Email_New" value="" />
+    <!-- |-> DO NOT CHANGE <-| Current Password-->
+    <GallerU name="Input_Password" value="123456789Aa!" />
+    <GallerU name="Input_Password_Uc" value="123456789AA!" />
+    <GallerU name="Input_Password_Lc" value="123456789aa!" />
+    <GallerU name="Input_Password_Empty" value="" />
+    <GallerU name="Input_Password_UperCase" value="ABCDEFGHIJKLM" />
+    <GallerU name="Input_Password_LowerCase" value="abcdefghijklm" />
+    <GallerU name="Input_Password_Numbers" value="123456789101112" />
+    <GallerU name="Input_Password_SpecialCharacters" value="!@#$%^@#!#()_+_)(" />
+    <GallerU name="Input_Password_Mix" value="Test1234!!" />
+    <!-- Create Event Inputs-->
+    <GallerU name="Input_NewEvent_EventName" value="Test Event Title" />
+    <GallerU name="Input_NewEvent_EventType" value="Basic Wedding" />
+    <GallerU name="Input_NewEvent_EventOwner" value="Bob Galdorf" />
+    <GallerU name="Input_NewEvent_EventMobilePhone" value="123456781" />
+    <GallerU name="Input_NewEvent_EventOwnerEmail" value="Bob@Gmail.com" />
+    <GallerU name="Input_NewEvent_EventFolder" value="Bob's Wedding" />
+  </GallerU>
+</AppsSettings>
