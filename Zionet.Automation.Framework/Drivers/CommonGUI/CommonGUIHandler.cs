@@ -243,7 +243,7 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
                 ReportManager.Driver($"Try Click {button} Button");
                 string btnLocator = Auth0ButtonsDict[button];
 
-                var btn = driver.FindElement(By.XPath(btnLocator));
+                var btn = driver.FindElement(By.Id(btnLocator));
 
                 if (btn != null)
                 {

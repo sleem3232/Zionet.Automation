@@ -232,6 +232,96 @@ namespace Zionet.Automation.GallerU
                 ReportManager.Driver("Sign Up Email Exists and Mix Password End");
             }
         }
-        
+
+        /**********Login***********/
+
+        [Trait("Category", "Login")]
+        [Fact]
+        public void LoginAndLogout()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("LoginAndLogout Steps Start");
+
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                Assert.Equal(true, photographer.isAuthentication(driver));
+
+                photographer.Logout(driver);
+
+                Thread.Sleep(TimeSpan.FromSeconds(10));
+                Assert.Equal(false, photographer.isAuthentication(driver));
+
+                ReportManager.Driver("LoginAndLogout Steps End");
+            }
+        }
+
+
+        [Fact]
+        public void Login_CorrectUserTest()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Login Steps Start");
+
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                Assert.Equal(true, photographer.isAuthentication(driver));
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+
+                ReportManager.Driver("Login Steps End");
+            }
+        }
+
+        [Fact]
+        public void Login_NotExistsEmail()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Sign Up Email Not Exists Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmailFake, Login_Password.InputPassword);
+                Assert.Equal(false, photographer.isAuthentication(driver));
+                ReportManager.Driver("Sign Up Email Not Exists End");
+            }
+        }
+
+        [Fact]
+        public void LoginUperCasePassword()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Sign Up Email Not Exists Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPasswordUc);
+                Assert.Equal(false, photographer.isAuthentication(driver));
+                ReportManager.Driver("Sign Up Email Not Exists End");
+            }
+        }
+
+        [Fact]
+        public void LoginLowerCasePassword()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Sign Up Email Not Exists Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPasswordLc);
+                Assert.Equal(false, photographer.isAuthentication(driver));
+                ReportManager.Driver("Sign Up Email Not Exists End");
+            }
+        }
+
+        [Fact]
+        public void LoginEmptyPassword()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Sign Up Email Not Exists Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPasswordEmpty);
+                Assert.Equal(false, photographer.isAuthentication(driver));
+                ReportManager.Driver("Sign Up Email Not Exists End");
+            }
+        }
+
     }
 }
