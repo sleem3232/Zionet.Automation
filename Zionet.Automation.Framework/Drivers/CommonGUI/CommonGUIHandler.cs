@@ -23,9 +23,9 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
 {
     public abstract class CommonGUIHandler
     {
-        //C:\Users\PC\Desktop\Selenium\Zionet.Automation\Zionet.Automation\Zionet.Automation.Framework\Resources\ConfigFile.xml
+        //C:\Users\barra\OneDrive\שולחן העבודה\AutoNet7\Zionet.Automation\Zionet.Automation.Framework\Resources\ConfigFile.xml
         protected static IWebDriver driver { get; }
-        private static ConfigHelper _configHelper = new ConfigHelper($@"C:\Users\PC\Desktop\Selenium\Zionet.Automation\Zionet.Automation\Zionet.Automation.Framework\Resources\ConfigFile.xml");
+        private static ConfigHelper _configHelper = new ConfigHelper($@"C:\Users\barra\OneDrive\שולחן העבודה\AutoNet7\Zionet.Automation\Zionet.Automation.Framework\Resources\ConfigFile.xml");
         private static TimeSpan _timeoutDefualt = TimeSpan.FromSeconds(30);
         private static TimeSpan _interval = TimeSpan.FromSeconds(1);
 
@@ -243,7 +243,7 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
                 ReportManager.Driver($"Try Click {button} Button");
                 string btnLocator = Auth0ButtonsDict[button];
 
-                var btn = driver.FindElement(By.XPath(btnLocator));
+                var btn = driver.FindElement(By.Id(btnLocator));
 
                 if (btn != null)
                 {
