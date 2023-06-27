@@ -11,6 +11,9 @@ using Zionet.Automation.Framework.Pages.Guest;
 using Zionet.Automation.Framework.Services.Reporter;
 using System.Diagnostics;
 using Zionet.Automation.Framework.Config;
+using static Zionet.Automation.Framework.Common.Enums.GallerU.CommonEnums;
+using static Zionet.Automation.Framework.Common.Enums.GallerU.ConversionDict;
+
 
 namespace Zionet.Automation.GallerU
 {
@@ -323,5 +326,142 @@ namespace Zionet.Automation.GallerU
             }
         }
 
+        /**********CreateEvent***********/
+
+        [Fact]
+        [Trait("Category", "CreateEvent")]
+        public void CreateEvent()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.Equal(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.Equal(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventWithOutName()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.None, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventWithOutDate()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventWithPastDate()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventWithOutOwnerName()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.None, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventWithOutPhoneNumber()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.None, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventWithOutEventFolder()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.None);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+        [Fact]
+
+        public void CreateEventEmpty()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, null);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
     }
 }
