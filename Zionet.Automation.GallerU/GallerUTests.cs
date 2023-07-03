@@ -236,231 +236,38 @@ namespace Zionet.Automation.GallerU
             }
         }
 
-        /**********Login***********/
 
-        [Trait("Category", "Login")]
         [Fact]
-        public void LoginAndLogout()
+        public void GeneralTest()
         {
             using (IWebDriver driver = new ChromeDriver(options))
             {
-                ReportManager.Driver("LoginAndLogout Steps Start");
-
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                Assert.Equal(true, photographer.isAuthentication(driver));
-
-                photographer.Logout(driver);
-
-                Thread.Sleep(TimeSpan.FromSeconds(10));
-                Assert.Equal(false, photographer.isAuthentication(driver));
-
-                ReportManager.Driver("LoginAndLogout Steps End");
-            }
-        }
-
-
-        [Fact]
-        public void Login_CorrectUserTest()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Login Steps Start");
-
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                Assert.Equal(true, photographer.isAuthentication(driver));
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-
-                ReportManager.Driver("Login Steps End");
-            }
-        }
-
-        [Fact]
-        public void Login_NotExistsEmail()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Sign Up Email Not Exists Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmailFake, Login_Password.InputPassword);
-                Assert.Equal(false, photographer.isAuthentication(driver));
-                ReportManager.Driver("Sign Up Email Not Exists End");
-            }
-        }
-
-        [Fact]
-        public void LoginUperCasePassword()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Sign Up Email Not Exists Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPasswordUc);
-                Assert.Equal(false, photographer.isAuthentication(driver));
-                ReportManager.Driver("Sign Up Email Not Exists End");
-            }
-        }
-
-        [Fact]
-        public void LoginLowerCasePassword()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Sign Up Email Not Exists Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPasswordLc);
-                Assert.Equal(false, photographer.isAuthentication(driver));
-                ReportManager.Driver("Sign Up Email Not Exists End");
-            }
-        }
-
-        [Fact]
-        public void LoginEmptyPassword()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Sign Up Email Not Exists Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPasswordEmpty);
-                Assert.Equal(false, photographer.isAuthentication(driver));
-                ReportManager.Driver("Sign Up Email Not Exists End");
-            }
-        }
-
-        /**********CreateEvent***********/
-
-        [Fact]
-        [Trait("Category", "CreateEvent")]
-        public void CreateEvent()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
+                ReportManager.Driver("Login Photographer Steps Start");
                 photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
                 Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.Equal(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.Equal(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
+                photographer.AddNewEvent(driver);
+                photographer.GoHome(driver);
+                photographer.GoPastEvents(driver);
+                // photographer.GoUpcomingEvents(driver);
+                photographer.OpenRecentEvent(driver);
+                Thread.Sleep(5000);
+                photographer.Uploadphoto(driver);
+                photographer.EventURLButtons(driver, EventsButtons.CopyToClipBoard);
 
-        [Fact]
-
-        public void CreateEventWithOutName()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.None, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
-
-        [Fact]
-
-        public void CreateEventWithOutDate()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
-
-        [Fact]
-
-        public void CreateEventWithPastDate()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
-
-        [Fact]
-
-        public void CreateEventWithOutOwnerName()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.None, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
-
-        [Fact]
-
-        public void CreateEventWithOutPhoneNumber()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.None, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
-
-        [Fact]
-
-        public void CreateEventWithOutEventFolder()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.None);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
-            }
-        }
-
-        [Fact]
-
-        public void CreateEventEmpty()
-        {
-            using (IWebDriver driver = new ChromeDriver(options))
-            {
-                ReportManager.Driver("Create Event Start");
-                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                photographer.CreateNewEvent(driver, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, CreateEventInputs.None, null);
-                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
-                Assert.NotEqual(RequestDict[NotificationAction.Create], photographer.notification.Request);
-                Assert.NotEqual(CommentDict[NotificationAction.Create], photographer.notification.Comment);
-                ReportManager.Driver("Create Event End");
+                ReportManager.Driver("Login Guest Steps Start");
+                //photographer.GoGuestURL(driver);
+                guest.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword, EventsButtons.CopyToClipBoard);
+                guest.OpenCamera(driver);
+                Thread.Sleep(5000);
+                guest.TakeSelfi(driver);
+                // guest.RetakePicture(driver);
+                //guest.TakeSelfi(driver);
+                guest.UseThisPicture(driver);
+                // guest.Logout(driver);
+                ReportManager.Driver("Login Guest Steps End");
+                Thread.Sleep(5000);
+                ReportManager.Driver("Login Photographer Steps End");
+                driver.Quit();
             }
         }
     }

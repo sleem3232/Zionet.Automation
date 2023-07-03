@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using WindowsInput;
 using Zionet.Automation.Framework.Common;
 using Zionet.Automation.Framework.Common.Enums.GallerU;
 using Zionet.Automation.Framework.Common.Enums.GallerU.Guest;
@@ -834,9 +835,15 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
                     {
                         picPath = $@"{folderPath}\{pic.Name}";
                         ClickBtn(driver, EventsButtons.UploadPhotos);
-                        //TODO move to .net7
-                        //System.Windows.Forms.SendKeys.SendWait(picPath);
-                        //System.Windows.Forms.SendKeys.SendWait("{Enter}");
+
+                        InputSimulator simulator = new InputSimulator();
+
+                        // Simulate typing the picPath string
+                        simulator.Keyboard.TextEntry(picPath);
+
+                        // Simulate pressing the Enter key
+                        simulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
+                       
                         Thread.Sleep(5000);
                         ReportManager.Driver($"{pic} Was Uploaded");
                         picPath = string.Empty;
