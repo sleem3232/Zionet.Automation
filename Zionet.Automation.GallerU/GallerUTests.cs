@@ -11,6 +11,9 @@ using Zionet.Automation.Framework.Pages.Guest;
 using Zionet.Automation.Framework.Services.Reporter;
 using System.Diagnostics;
 using Zionet.Automation.Framework.Config;
+using static Zionet.Automation.Framework.Common.Enums.GallerU.CommonEnums;
+using static Zionet.Automation.Framework.Common.Enums.GallerU.ConversionDict;
+
 
 namespace Zionet.Automation.GallerU
 {

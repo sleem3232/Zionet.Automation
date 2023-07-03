@@ -42,8 +42,8 @@ namespace Zionet.Automation.Framework.Common.Enums.GallerU
         
         public static Dictionary<Auth0Buttons, string> Auth0ButtonsDict = new Dictionary<Auth0Buttons, string>()
         {
-            { Auth0Buttons.Continue,                    $@"//*[@id=""btn-login""]" },
-            { Auth0Buttons.SignUp,                      $@"//a[text()='Sign up']" },
+            { Auth0Buttons.Continue,                    $"btn-login" },
+            { Auth0Buttons.SignUp,                      $"btn-signup" },
         };
 
         public static Dictionary<NewEventInputs, string> NewEventInputsDict = new Dictionary<NewEventInputs, string>()
