@@ -23,6 +23,8 @@ namespace Zionet.Automation.GallerU
         private Proxy proxy = new Proxy();
         protected Photographer photographer = new Photographer();
         protected Guest guest = new Guest();
+        private static ConfigHelper _configHelper = new ConfigHelper(Path.Combine(Environment.CurrentDirectory, "Resources", "ConfigFile.xml"));
+        private string selfeVideoPath = _configHelper.GetElement("SelfeVideo_Path", "GallerU");
 
 
         public GallerUTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
@@ -31,6 +33,9 @@ namespace Zionet.Automation.GallerU
             options.Proxy = proxy;
             options.AddArguments("start-maximized");
             options.AddArgument("--remote-debugging-port=6321"); // Set the desired port here
+            options.AddArguments("--use-fake-device-for-media-stream"); // Add the following arguments to enable camera access
+            options.AddArguments("--use-fake-ui-for-media-stream");
+            options.AddArgument($"--use-file-for-fake-video-capture={selfeVideoPath}/newfile.y4m");
         }
         [CollectionDefinition("SharedFolderCollection")]
         public class SharedFolderCollection : ICollectionFixture<SharedFolderFixture>
@@ -236,7 +241,65 @@ namespace Zionet.Automation.GallerU
             }
         }
 
+        /**********Login***********/
 
+        [Trait("Category", "Login")]
+        public void LoginTestes()
+        {
+            Login_CorrectUserTest();
+            //Login_NotExistsEmail();
+            //LoginUperCasePassword();
+            //LoginLowerCasePassword();
+            //LoginEmptyPassword();
+            //LoginAndLogout();
+        }
+        public void Login_CorrectUserTest()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Login Steps Start");
+
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                Assert.Equal(true, photographer.isAuthentication(driver));
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+
+                ReportManager.Driver("Login Steps End");
+            }
+        }
+
+        [Trait("Category", "Create Event")]
+        public void CreateEventTests()
+        {
+            CreateEvent();
+            //CreateEventWithOutName();
+            //CreateEventWithOutDate();
+            //CreateEventWithPastDate();
+            //CreateEventWithOutOwnerName();
+            //CreateEventWithOutPhoneNumber();
+            //CreateEventWithOutEventFolder();
+            //CreateEventEmpty();
+        }
+
+
+
+        public void CreateEvent()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Create Event Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.CreateNewEvent(driver, CreateEventInputs.InputEventName, CreateEventInputs.InputEventType, CreateEventInputs.InputEventOwner, CreateEventInputs.InputEventMobilePhone, CreateEventInputs.InputEventOwnerEmail, CreateEventInputs.InputEventFolder);
+                photographer.CatchAlert(driver, NotificationState.ReqCreate, NotificationState.CmtCreate);
+                Assert.Equal(RequestDict[NotificationAction.Create], photographer.notification.Request);
+                Assert.Equal(CommentDict[NotificationAction.Create], photographer.notification.Comment);
+                ReportManager.Driver("Create Event End");
+            }
+        }
+
+       
         [Fact]
         public void GeneralTest()
         {
@@ -246,24 +309,25 @@ namespace Zionet.Automation.GallerU
                 photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
                 Thread.Sleep(TimeSpan.FromSeconds(5));
                 photographer.AddNewEvent(driver);
+               
+                // photographer.GoPastEvents(driver);
+               // photographer.GoUpcomingEvents(driver);
                 photographer.GoHome(driver);
-                photographer.GoPastEvents(driver);
+                photographer.GoUpcomingEvents(driver);
+                //photographer.OpenRecentEvent(driver);
+                //photographer.GoHome(driver);
                 // photographer.GoUpcomingEvents(driver);
-                photographer.OpenRecentEvent(driver);
+                //photographer.OpenRecentEvent(driver);
+                //photographer.GoPastEvents(driver);
                 Thread.Sleep(5000);
                 photographer.Uploadphoto(driver);
                 photographer.EventURLButtons(driver, EventsButtons.CopyToClipBoard);
-
                 ReportManager.Driver("Login Guest Steps Start");
-                //photographer.GoGuestURL(driver);
                 guest.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword, EventsButtons.CopyToClipBoard);
                 guest.OpenCamera(driver);
                 Thread.Sleep(5000);
                 guest.TakeSelfi(driver);
-                // guest.RetakePicture(driver);
-                //guest.TakeSelfi(driver);
                 guest.UseThisPicture(driver);
-                // guest.Logout(driver);
                 ReportManager.Driver("Login Guest Steps End");
                 Thread.Sleep(5000);
                 ReportManager.Driver("Login Photographer Steps End");

@@ -12,6 +12,7 @@
     <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Selenium.WebDriver" Version="4.10.0" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Resources\ConfigFile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\FrameworkConfiguration.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
