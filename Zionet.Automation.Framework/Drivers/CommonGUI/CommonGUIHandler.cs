@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using TextCopy;
 using WindowsInput;
 using Zionet.Automation.Framework.Common;
 using Zionet.Automation.Framework.Common.Enums.GallerU;
@@ -26,7 +27,9 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
     {
         //C:\Users\barra\OneDrive\שולחן העבודה\AutoNet7\Zionet.Automation\Zionet.Automation.Framework\Resources\ConfigFile.xml
         protected static IWebDriver driver { get; }
-        private static ConfigHelper _configHelper = new ConfigHelper($@"C:\Users\barra\OneDrive\שולחן העבודה\AutoNet7\Zionet.Automation\Zionet.Automation.Framework\Resources\ConfigFile.xml");
+        private static ConfigHelper _configHelper = new ConfigHelper(Path.Combine(Environment.CurrentDirectory, "Resources", "ConfigFile.xml"));
+
+
         private static TimeSpan _timeoutDefualt = TimeSpan.FromSeconds(30);
         private static TimeSpan _interval = TimeSpan.FromSeconds(1);
 
@@ -122,6 +125,10 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
             {
                 try
                 {
+
+
+                    clipboardText = ClipboardService.GetText();
+
                     //TODO move to.net7
                     //clipboardText = System.Windows.Clipboard.GetText();
                 }
@@ -403,16 +410,6 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
                             inputEmail.SendKeys(email);
                             ReportManager.Driver("Email For Login Sent");
                             Thread.Sleep(TimeSpan.FromSeconds(3));
-
-                            try
-                            {
-                                ClickBtn(driver, Auth0Buttons.Continue);
-                            }
-                            catch (Exception ex)
-                            {
-                                ReportManager.Fatal(ex.Message);
-                            }
-
                             var inputPassword = driver.FindElement(By.Id("password"));
 
                             if (inputPassword != null)
@@ -461,7 +458,7 @@ namespace Zionet.Automation.Framework.Drivers.CommonGUI
             }
         }
 
-        public static void AddNewEventInput(IWebDriver driver, string eventName = null, DateTime? dateTime = null)
+        public static void AddNewEventInput(IWebDriver driver, string? eventName = null, DateTime? dateTime = null)
         {
             try
             {

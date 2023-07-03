@@ -1,0 +1,56 @@
+﻿!!!!
+
+
+At this stage,
+
+to test the selfie image,
+
+you need to hack into the browser's camera,
+
+and we will do it by uploading a video that was taken before,
+
+and then we will upload it in the default place,
+
+and in order to do this, you need several steps:
+
+After the tests,
+
+the browser accepts a video in a format called "Y4M",
+
+you can read about this format on this website https://fileinfo.com/extension/y4m
+
+!!!!
+
+-Now the steps that need to be done first you need to have WSL on your computer or BASH...
+
+-otherwise I used Cygwin:
+
+-After installation you need to go to powershell
+
+-and run as administrator and then run this command 
+
+-"choco install ffmpeg" 
+
+-after it is installed you need to open Cygwin COMMAND
+
+-and go to the location where you have the recording of the selfie
+
+-For example:
+
+If you want to go to Desktop
+
+You can use this command:
+
+"$ cd /cygdrive/c/Users/PC/Desktop".
+
+And after that use this command to convert from MP4 to Y4M:
+
+ffmpeg -i MyFileName.mp4 -pix_fmt yuv420p NewFileName.y4m
+
+Then change the names
+
+And after doing the actions properly,
+
+you can check it by taking the file that ends Y4M and then check if the video works in VLC for example.
+
+And after that you can use a file in your code that uploads a video to a browser

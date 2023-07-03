@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Xml.Linq;
 using Zionet.Automation.Framework.Common;
 using Zionet.Automation.Framework.Drivers.Photographer;
@@ -53,11 +54,11 @@ namespace Zionet.Automation.Framework.Pages.Photographer
             photographerHandler.Login(driver, loginType, loginEmail, loginPassword, timeout);
         }
 
-        public void GoHome(IWebDriver driver)
+        public void GoHome(IWebDriver driver, TimeSpan? timeout=null)
         {
             ReportManager.Test(MethodBase.GetCurrentMethod().Name);
             ReportManager.Component(MethodBase.GetCurrentMethod().Name);
-          //  photographerHandler.HomeClick(driver);
+            photographerHandler.HomeClick(driver,timeout);
         }
 
         public void AddNewEvent(IWebDriver driver, string eventName = null, DateTime? dateTime = null, TimeSpan? timeout = null)
@@ -108,13 +109,14 @@ namespace Zionet.Automation.Framework.Pages.Photographer
             ReportManager.Test(MethodBase.GetCurrentMethod().Name);
             ReportManager.Component(MethodBase.GetCurrentMethod().Name);
             photographerHandler.UpcomingEventClick(driver, timeout);
+            photographerHandler.OpenRecentEvent(driver, timeout);
         }
 
         public void OpenRecentEvent(IWebDriver driver, TimeSpan? timeout = null)
         {
             ReportManager.Test(MethodBase.GetCurrentMethod().Name);
             ReportManager.Component(MethodBase.GetCurrentMethod().Name);
-            photographerHandler.OpenRecentEvent(driver, timeout);
+           
         }
 
         public void EventURLButtons(IWebDriver driver, EventsButtons button, TimeSpan? timeout = null)
