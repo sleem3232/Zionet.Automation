@@ -232,6 +232,40 @@ namespace Zionet.Automation.GallerU
                 ReportManager.Driver("Sign Up Email Exists and Mix Password End");
             }
         }
-        
+
+
+        [Fact]
+        public void GeneralTest()
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+                ReportManager.Driver("Login Photographer Steps Start");
+                photographer.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                photographer.AddNewEvent(driver);
+                photographer.GoHome(driver);
+                photographer.GoPastEvents(driver);
+                // photographer.GoUpcomingEvents(driver);
+                photographer.OpenRecentEvent(driver);
+                Thread.Sleep(5000);
+                photographer.Uploadphoto(driver);
+                photographer.EventURLButtons(driver, EventsButtons.CopyToClipBoard);
+
+                ReportManager.Driver("Login Guest Steps Start");
+                //photographer.GoGuestURL(driver);
+                guest.Login(driver, Auth0Type.Email, Login_Email.InputEmail, Login_Password.InputPassword, EventsButtons.CopyToClipBoard);
+                guest.OpenCamera(driver);
+                Thread.Sleep(5000);
+                guest.TakeSelfi(driver);
+                // guest.RetakePicture(driver);
+                //guest.TakeSelfi(driver);
+                guest.UseThisPicture(driver);
+                // guest.Logout(driver);
+                ReportManager.Driver("Login Guest Steps End");
+                Thread.Sleep(5000);
+                ReportManager.Driver("Login Photographer Steps End");
+                driver.Quit();
+            }
+        }
     }
 }
